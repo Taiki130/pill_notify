@@ -15,23 +15,13 @@ provider "github" {}
 provider "sops" {}
 
 resource "github_actions_secret" "secrets" {
-  for_each = var.github_actions_secrets
+  for_each = nonsensitive(data.sops_file.secrets.data)
 
   repository      = "pill_notify"
   secret_name     = each.key
-  plaintext_value = data.sops_file.secrets.data[each.key]
+  plaintext_value = each.value
 }
 
 data "sops_file" "secrets" {
   source_file = "secrets.yaml"
-}
-
-variable "github_actions_secrets" {
-  type = set(string)
-  default = [
-    "LINE_TOKEN",
-    "MESSAGE",
-    "IMAGE_THUMBNAIL_URL",
-    "IMAGE_FULLSIZE_URL",
-  ]
 }
