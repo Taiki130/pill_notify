@@ -58,6 +58,9 @@ func main() {
 	if err != nil {
 		log.Fatal(fmt.Errorf("LINEへのメッセージ送信に失敗しました。: %w", err))
 	}
+	if resp.StatusCode >= 400 {
+		log.Fatal(fmt.Errorf("LINEへのメッセージ送信に失敗しました。ステータスコード: %d", resp.StatusCode))
+	}
 	defer resp.Body.Close()
 }
 
