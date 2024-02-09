@@ -7,19 +7,20 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
+	"time"
 
 	"github.com/caarlos0/env/v10"
 	"github.com/sashabaranov/go-openai"
 )
 
 type config struct {
-	LineToken         string `env:"LINE_TOKEN,required,notEmpty"`
-	OpenAIAPIKey      string `env:"OPENAI_API_KEY,required,notEmpty"`
-	Prompt            string `env:"OPENAI_PROMPT,required,notEmpty"`
-	ImageThumbnailURL string `env:"IMAGE_THUMBNAIL_URL,required,notEmpty"`
-	ImageFullsizeURL  string `env:"IMAGE_FULLSIZE_URL,required,notEmpty"`
+	LineToken    string   `env:"LINE_TOKEN,required,notEmpty"`
+	OpenAIAPIKey string   `env:"OPENAI_API_KEY,required,notEmpty"`
+	Prompt       string   `env:"OPENAI_PROMPT,required,notEmpty"`
+	ImageURLs    []string `env:"IMAGE_URL,required,notEmpty" envSeparator:","`
 }
 
 func main() {
@@ -34,10 +35,15 @@ func main() {
 		log.Fatal(fmt.Errorf("メッセージの生成に失敗しました。: %w", err))
 	}
 
+	imageURL, err := getRandomImage(cfg.ImageURLs)
+	if err != nil {
+		log.Fatal(fmt.Errorf("画像の取得に失敗しました。: %w", err))
+	}
+
 	formData := map[string]string{
 		"message":        message,
-		"imageThumbnail": cfg.ImageThumbnailURL,
-		"imageFullsize":  cfg.ImageFullsizeURL,
+		"imageThumbnail": imageURL,
+		"imageFullsize":  imageURL,
 	}
 
 	body, contentType, err := createFormData(formData)
@@ -53,21 +59,6 @@ func main() {
 		log.Fatal(fmt.Errorf("LINEへのメッセージ送信に失敗しました。: %w", err))
 	}
 	defer resp.Body.Close()
-}
-
-func addHeader(lineToken string, body io.Reader, contentType string) (req *http.Request, err error) {
-	method := "POST"
-	url := "https://notify-api.line.me/api/notify"
-
-	authHeader := fmt.Sprintf("Bearer %s", lineToken)
-	req, err = http.NewRequest(method, url, body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", contentType)
-	req.Header.Set("Authorization", authHeader)
-	return
 }
 
 func generateMessage(openAIAPIKey string, prompt string) (message string, err error) {
@@ -93,6 +84,19 @@ func generateMessage(openAIAPIKey string, prompt string) (message string, err er
 	return resp.Choices[0].Message.Content, nil
 }
 
+func getRandomImage(imageURLs []string) (imageURL string, err error) {
+	sliceLen := len(imageURLs)
+	if sliceLen == 0 {
+		return "", errors.New("画像URLが指定されていません")
+	}
+
+	seed := time.Now().UnixNano()
+	r := rand.New(rand.NewSource(seed))
+	randInt := r.Intn(sliceLen)
+	imageURL = imageURLs[randInt]
+	return
+}
+
 func createFormData(formData map[string]string) (io.Reader, string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -105,4 +109,19 @@ func createFormData(formData map[string]string) (io.Reader, string, error) {
 		return nil, "", err
 	}
 	return body, writer.FormDataContentType(), nil
+}
+
+func addHeader(lineToken string, body io.Reader, contentType string) (req *http.Request, err error) {
+	method := "POST"
+	url := "https://notify-api.line.me/api/notify"
+
+	authHeader := fmt.Sprintf("Bearer %s", lineToken)
+	req, err = http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", contentType)
+	req.Header.Set("Authorization", authHeader)
+	return
 }
