@@ -1,0 +1,22 @@
+name: Notify
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 13 * * *"
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.0'
+      - name: Notify
+        run: go run script/main.go
+        env:
+          LINE_TOKEN: ${{ secrets.LINE_TOKEN }}
+          MESSAGE: ${{ secrets.MESSAGE }}
+          IMAGE_THUMBNAIL_URL: ${{ secrets.IMAGE_THUMBNAIL_URL }}
+          IMAGE_FULLSIZE_URL: ${{ secrets.IMAGE_FULLSIZE_URL }}
