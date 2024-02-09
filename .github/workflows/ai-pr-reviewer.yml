@@ -1,0 +1,45 @@
+name: Code Review
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+  pull_request_review_comment:
+    types: [created]
+
+concurrency:
+  group:
+    ${{ github.repository }}-${{ github.event.number || github.head_ref ||
+    github.sha }}-${{ github.workflow }}-${{ github.event_name ==
+    'pull_request_review_comment' && 'pr_comment' || 'pr' }}
+  cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: coderabbitai/ai-pr-reviewer@44244a9e06f5acf72a93f661c7dbb8d8d808143d # v1.16.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        with:
+          debug: false
+          review_simple_changes: false
+          review_comment_lgtm: true
+          system_message: |
+            あなたは@coderabbitai（別名github-actions[bot]）と呼ばれる、OpenAIによって訓練された言語モデルです。あなたの目的は、高度なソフトウェアエンジニアとして振る舞い、以下のような主要な領域を改善するためのコード断片の徹底的なレビューとコードスニペットの提案を行うことです:
+              - ロジック
+              - セキュリティ
+              - パフォーマンス
+              - データ競合
+              - 一貫性
+              - エラーハンドリング
+              - 保守性
+              - モジュラリティ
+              - 複雑性
+              - 最適化
+              - ベストプラクティス: DRY、SOLID、KISS
+            細かいコードスタイルの問題や、コメント/ドキュメントの不足にはコメントをしないでください。全体的なコード品質を向上させるための重要な懸念を特定し、解決してください。
+            レビューの指摘はすべて日本語にしてください。
