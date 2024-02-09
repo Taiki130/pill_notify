@@ -2,65 +2,70 @@ package main
 
 import (
 	"bytes"
+	"context"
+	"errors"
 	"fmt"
 	"io"
+	"log"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
-	"os"
-	"context"
-	"log"
+	"time"
 
+	"github.com/caarlos0/env/v10"
 	"github.com/sashabaranov/go-openai"
 )
 
+type config struct {
+	LineToken    string   `env:"LINE_TOKEN,required,notEmpty"`
+	OpenAIAPIKey string   `env:"OPENAI_API_KEY,required,notEmpty"`
+	Prompt       string   `env:"OPENAI_PROMPT,required,notEmpty"`
+	ImageURLs    []string `env:"IMAGE_URL,required,notEmpty" envSeparator:","`
+}
+
 func main() {
-	lineToken := os.Getenv("LINE_TOKEN")
-	prompt := os.Getenv("OPENAI_PROMPT")
-	openAPIKey := os.Getenv("OPENAI_API_KEY")
-	imageThumbnailURL := os.Getenv("IMAGE_THUMBNAIL_URL")
-	imageFullsizeURL := os.Getenv("IMAGE_FULLSIZE_URL")
 
-	url := "https://notify-api.line.me/api/notify"
-	method := "POST"
+	cfg := config{}
+	if err := env.Parse(&cfg); err != nil {
+		log.Fatal(fmt.Errorf("環境変数の設定に失敗しました。: %w", err))
+	}
 
-	message, err := generateMessage(openAPIKey, prompt)
+	message, err := generateMessage(cfg.OpenAIAPIKey, cfg.Prompt)
 	if err != nil {
 		log.Fatal(fmt.Errorf("メッセージの生成に失敗しました。: %w", err))
 	}
 
+	imageURL, err := getRandomImage(cfg.ImageURLs)
+	if err != nil {
+		log.Fatal(fmt.Errorf("画像の取得に失敗しました。: %w", err))
+	}
+
 	formData := map[string]string{
 		"message":        message,
-		"imageThumbnail": imageThumbnailURL,
-		"imageFullsize":  imageFullsizeURL,
+		"imageThumbnail": imageURL,
+		"imageFullsize":  imageURL,
 	}
 
 	body, contentType, err := createFormData(formData)
 	if err != nil {
-		log.Fatal(err)
-		return
+		log.Fatal(fmt.Errorf("フォームデータの生成に失敗しました。: %w", err))
 	}
 
-	// TODO: 関数に切り出す
-	authHeader := fmt.Sprintf("Bearer %s", lineToken)
-	req, err := http.NewRequest(method, url, body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	req.Header.Set("Content-Type", contentType)
-	req.Header.Set("Authorization", authHeader)
+	req, err := addHeader(cfg.LineToken, body, contentType)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Fatal(fmt.Errorf("LINEへのメッセージ送信に失敗しました。: %w", err))
+	}
+	if resp.StatusCode >= 400 {
+		log.Fatal(fmt.Errorf("LINEへのメッセージ送信に失敗しました。ステータスコード: %d", resp.StatusCode))
 	}
 	defer resp.Body.Close()
 }
 
-func generateMessage(openAPIKey string, prompt string) (string, error) {
-	client := openai.NewClient(openAPIKey)
+func generateMessage(openAIAPIKey string, prompt string) (message string, err error) {
+	client := openai.NewClient(openAIAPIKey)
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
@@ -82,6 +87,19 @@ func generateMessage(openAPIKey string, prompt string) (string, error) {
 	return resp.Choices[0].Message.Content, nil
 }
 
+func getRandomImage(imageURLs []string) (imageURL string, err error) {
+	sliceLen := len(imageURLs)
+	if sliceLen == 0 {
+		return "", errors.New("画像URLが指定されていません")
+	}
+
+	seed := time.Now().UnixNano()
+	r := rand.New(rand.NewSource(seed))
+	randInt := r.Intn(sliceLen)
+	imageURL = imageURLs[randInt]
+	return
+}
+
 func createFormData(formData map[string]string) (io.Reader, string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -94,4 +112,19 @@ func createFormData(formData map[string]string) (io.Reader, string, error) {
 		return nil, "", err
 	}
 	return body, writer.FormDataContentType(), nil
+}
+
+func addHeader(lineToken string, body io.Reader, contentType string) (req *http.Request, err error) {
+	method := "POST"
+	url := "https://notify-api.line.me/api/notify"
+
+	authHeader := fmt.Sprintf("Bearer %s", lineToken)
+	req, err = http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", contentType)
+	req.Header.Set("Authorization", authHeader)
+	return
 }
