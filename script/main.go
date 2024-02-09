@@ -9,42 +9,48 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
-	"os"
 
+	"github.com/caarlos0/env/v10"
 	"github.com/sashabaranov/go-openai"
 )
 
-func main() {
-	lineToken := os.Getenv("LINE_TOKEN")
-	prompt := os.Getenv("OPENAI_PROMPT")
-	openAPIKey := os.Getenv("OPENAI_API_KEY")
-	imageThumbnailURL := os.Getenv("IMAGE_THUMBNAIL_URL")
-	imageFullsizeURL := os.Getenv("IMAGE_FULLSIZE_URL")
+type config struct {
+	LineToken         string `env:"LINE_TOKEN,required,notEmpty"`
+	OpenAIAPIKey      string `env:"OPENAI_API_KEY,required,notEmpty"`
+	Prompt            string `env:"OPENAI_PROMPT,required,notEmpty"`
+	ImageThumbnailURL string `env:"IMAGE_THUMBNAIL_URL,required,notEmpty"`
+	ImageFullsizeURL  string `env:"IMAGE_FULLSIZE_URL,required,notEmpty"`
+}
 
-	message, err := generateMessage(openAPIKey, prompt)
+func main() {
+
+	cfg := config{}
+	if err := env.Parse(&cfg); err != nil {
+		log.Fatal(fmt.Errorf("環境変数の設定に失敗しました。: %w", err))
+	}
+
+	message, err := generateMessage(cfg.OpenAIAPIKey, cfg.Prompt)
 	if err != nil {
 		log.Fatal(fmt.Errorf("メッセージの生成に失敗しました。: %w", err))
 	}
 
 	formData := map[string]string{
 		"message":        message,
-		"imageThumbnail": imageThumbnailURL,
-		"imageFullsize":  imageFullsizeURL,
+		"imageThumbnail": cfg.ImageThumbnailURL,
+		"imageFullsize":  cfg.ImageFullsizeURL,
 	}
 
 	body, contentType, err := createFormData(formData)
 	if err != nil {
-		log.Fatal(err)
-		return
+		log.Fatal(fmt.Errorf("フォームデータの生成に失敗しました。: %w", err))
 	}
 
-	req, err := addHeader(lineToken, body, contentType)
+	req, err := addHeader(cfg.LineToken, body, contentType)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Fatal(fmt.Errorf("LINEへのメッセージ送信に失敗しました。: %w", err))
 	}
 	defer resp.Body.Close()
 }
@@ -64,8 +70,8 @@ func addHeader(lineToken string, body io.Reader, contentType string) (req *http.
 	return
 }
 
-func generateMessage(openAPIKey string, prompt string) (message string, err error) {
-	client := openai.NewClient(openAPIKey)
+func generateMessage(openAIAPIKey string, prompt string) (message string, err error) {
+	client := openai.NewClient(openAIAPIKey)
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
