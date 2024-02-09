@@ -2,13 +2,14 @@ package main
 
 import (
 	"bytes"
+	"context"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
-	"context"
-	"log"
 
 	"github.com/sashabaranov/go-openai"
 )
@@ -19,9 +20,6 @@ func main() {
 	openAPIKey := os.Getenv("OPENAI_API_KEY")
 	imageThumbnailURL := os.Getenv("IMAGE_THUMBNAIL_URL")
 	imageFullsizeURL := os.Getenv("IMAGE_FULLSIZE_URL")
-
-	url := "https://notify-api.line.me/api/notify"
-	method := "POST"
 
 	message, err := generateMessage(openAPIKey, prompt)
 	if err != nil {
@@ -40,15 +38,7 @@ func main() {
 		return
 	}
 
-	// TODO: 関数に切り出す
-	authHeader := fmt.Sprintf("Bearer %s", lineToken)
-	req, err := http.NewRequest(method, url, body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	req.Header.Set("Content-Type", contentType)
-	req.Header.Set("Authorization", authHeader)
+	req, err := addHeader(lineToken, body, contentType)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -59,7 +49,22 @@ func main() {
 	defer resp.Body.Close()
 }
 
-func generateMessage(openAPIKey string, prompt string) (string, error) {
+func addHeader(lineToken string, body io.Reader, contentType string) (req *http.Request, err error) {
+	method := "POST"
+	url := "https://notify-api.line.me/api/notify"
+
+	authHeader := fmt.Sprintf("Bearer %s", lineToken)
+	req, err = http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", contentType)
+	req.Header.Set("Authorization", authHeader)
+	return
+}
+
+func generateMessage(openAPIKey string, prompt string) (message string, err error) {
 	client := openai.NewClient(openAPIKey)
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
