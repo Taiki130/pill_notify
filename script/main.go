@@ -76,6 +76,9 @@ func generateMessage(openAPIKey string, prompt string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if len(resp.Choices) == 0 {
+		return "", errors.New("OpenAI APIからのレスポンスに選択肢が含まれていません")
+	}
 	return resp.Choices[0].Message.Content, nil
 }
 
