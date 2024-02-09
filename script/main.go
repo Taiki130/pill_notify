@@ -7,15 +7,26 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"context"
+	"log"
+
+	"github.com/sashabaranov/go-openai"
 )
 
 func main() {
 	lineToken := os.Getenv("LINE_TOKEN")
-	message := os.Getenv("MESSAGE")
+	prompt := os.Getenv("OPENAI_PROMPT")
+	openAPIKey := os.Getenv("OPENAI_API_KEY")
 	imageThumbnailURL := os.Getenv("IMAGE_THUMBNAIL_URL")
 	imageFullsizeURL := os.Getenv("IMAGE_FULLSIZE_URL")
+
 	url := "https://notify-api.line.me/api/notify"
 	method := "POST"
+
+	message, err := generateMessage(openAPIKey, prompt)
+	if err != nil {
+		log.Fatal(fmt.Errorf("メッセージの生成に失敗しました。: %w", err))
+	}
 
 	formData := map[string]string{
 		"message":        message,
@@ -25,10 +36,11 @@ func main() {
 
 	body, contentType, err := createFormData(formData)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 
+	// TODO: 関数に切り出す
 	authHeader := fmt.Sprintf("Bearer %s", lineToken)
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
@@ -45,6 +57,26 @@ func main() {
 		return
 	}
 	defer resp.Body.Close()
+}
+
+func generateMessage(openAPIKey string, prompt string) (string, error) {
+	client := openai.NewClient(openAPIKey)
+	resp, err := client.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model: openai.GPT3Dot5Turbo,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role:    openai.ChatMessageRoleUser,
+					Content: prompt,
+				},
+			},
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+	return resp.Choices[0].Message.Content, nil
 }
 
 func createFormData(formData map[string]string) (io.Reader, string, error) {

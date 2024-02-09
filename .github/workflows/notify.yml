@@ -15,9 +15,13 @@ jobs:
           go-version: '1.22.0'
           cache: false
       - name: Notify
-        run: go run script/main.go
+        working-directory: script
+        run: |
+          go mod download
+          go run main.go
         env:
           LINE_TOKEN: ${{ secrets.LINE_TOKEN }}
-          MESSAGE: ${{ secrets.MESSAGE }}
+          OPENAI_PROMPT: ${{ secrets.OPENAI_PROMPT }}
           IMAGE_THUMBNAIL_URL: ${{ secrets.IMAGE_THUMBNAIL_URL }}
           IMAGE_FULLSIZE_URL: ${{ secrets.IMAGE_FULLSIZE_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
