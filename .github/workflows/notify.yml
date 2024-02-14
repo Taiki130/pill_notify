@@ -5,9 +5,34 @@ on:
   schedule:
     - cron: "0 13 * * *"
 
+env:
+  FIRST_RUN_DATE: 2024-02-14
+  CYCLE: 28
+  DAYS_OF_PILL: 21
+
 jobs:
+  calculate-days:
+    runs-on: ubuntu-latest
+    outputs:
+      is_holiday: ${{ steps.calculate.outputs.is_holiday }}
+    steps:
+      - name: Calculate
+        id: calculate
+        run: |
+          current_date=$(date +%Y-%m-%d)
+          start=$(date -d ${{ env.FIRST_RUN_DATE }} +%s)
+          end=$(date -d $current_date +%s)
+          daydiff=$(((end-start) / 60 / 60 / 24 ))
+          if [[ $((daydiff % ${{ env.CYCLE }} - ${{ env.DAYS_OF_PILL }} )) <= 0 ]]; then
+            echo "is_holiday=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_holiday=true" >> "$GITHUB_OUTPUT"
+          fi
   notify:
     runs-on: ubuntu-latest
+    if: ${{ needs.calculate-days.outputs.is_holiday }} 
+    needs:
+      - calculate-days
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: actions/setup-go@v5
