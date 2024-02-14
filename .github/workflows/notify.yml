@@ -28,8 +28,9 @@ jobs:
           else
             echo "is_holiday=true" >> "$GITHUB_OUTPUT"
           fi
+          echo "is_holiday=$is_holiday"
   notify:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     if: ${{ needs.calculate-days.outputs.is_holiday }} 
     needs:
       - calculate-days
