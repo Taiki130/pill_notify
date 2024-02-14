@@ -23,13 +23,13 @@ jobs:
           start=$(date -d ${{ env.FIRST_RUN_DATE }} +%s)
           end=$(date -d $current_date +%s)
           daydiff=$(((end-start) / 60 / 60 / 24 ))
-          if [[ $((daydiff % ${{ env.CYCLE }} - ${{ env.DAYS_OF_PILL }} )) <= 0 ]]; then
+          if [[ $((daydiff % 28 - 21 )) -le 0 ]]; then
             echo "is_holiday=false" >> "$GITHUB_OUTPUT"
           else
             echo "is_holiday=true" >> "$GITHUB_OUTPUT"
           fi
   notify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
     if: ${{ needs.calculate-days.outputs.is_holiday }} 
     needs:
       - calculate-days
