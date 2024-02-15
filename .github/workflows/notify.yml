@@ -23,16 +23,16 @@ jobs:
           start=$(date -d ${{ env.FIRST_RUN_DATE }} +%s)
           # end=$(date -d $current_date +%s)
           end=$(date -d 2024-03-06 +%s)
-          daydiff=$(((end-start) / 60 / 60 / 24 ))
-          if [[ $((daydiff % 28 - 21 )) -le 0 ]]; then
-            echo "is_holiday=false" >> "$GITHUB_OUTPUT"
-          else
+          weekdiff=$(((end-start) / 60 / 60 / 24 / 7 ))
+          if [[ $((weekdiff / 4)) -eq 3 ]]; then
             echo "is_holiday=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_holiday=false" >> "$GITHUB_OUTPUT"
           fi
           cat "$GITHUB_OUTPUT"
   notify:
     runs-on: ubuntu-latest
-    if: ${{ needs.calculate-days.outputs.is_holiday }} 
+    if: ${{ needs.calculate-days.outputs.is_holiday == 'false' }} 
     needs:
       - calculate-days
     steps:
