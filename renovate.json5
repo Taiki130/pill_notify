@@ -5,12 +5,13 @@
     ],
     timezone: "Asia/Tokyo",
     reviewers: ["Taiki130"],
-    "labels": ["dependencies"],
-    "packageRules":[
+    labels: ["dependencies"],
+    packageRules:[
         {
-            "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-            "automerge": true,
-            "commitBody": "[skip ci]"
+            matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+            automerge: true,
+            commitBody: "[skip ci]",
+            platformAutomerge: true
         },
     ]
 }
