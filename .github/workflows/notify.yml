@@ -27,9 +27,11 @@ jobs:
             echo "is_holiday=false" >> "$GITHUB_OUTPUT"
           fi
           cat "$GITHUB_OUTPUT"
+    env:
+      TZ: 'Asia/Tokyo'
   notify:
     runs-on: ubuntu-latest
-    if: ${{ needs.calculate-days.outputs.is_holiday != 'true' }}
+    if: ${{ needs.calculate-days.outputs.is_holiday != 'true' && success() }}
     needs:
       - calculate-days
     steps:
