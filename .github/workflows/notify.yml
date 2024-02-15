@@ -31,9 +31,8 @@ jobs:
       TZ: 'Asia/Tokyo'
   notify:
     runs-on: ubuntu-latest
-    if: ${{ needs.calculate-days.outputs.is_holiday != 'true' && success() }}
-    needs:
-      - calculate-days
+    if: ${{ needs.calculate-days.outputs.is_holiday != 'true' && needs.calculate-days.result == 'success' }}
+    needs: calculate-days
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: actions/setup-go@v5
