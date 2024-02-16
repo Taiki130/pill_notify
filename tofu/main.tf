@@ -2,11 +2,11 @@ terraform {
   required_providers {
     github = {
       source  = "integrations/github"
-      version = "5.33.0"
+      version = "5.45.0"
     }
     sops = {
       source  = "carlpett/sops"
-      version = "0.7.1"
+      version = "1.0.0"
     }
     spacelift = {
       source  = "spacelift-io/spacelift"
