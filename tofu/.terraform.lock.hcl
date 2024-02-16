@@ -2,17 +2,17 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/carlpett/sops" {
-  version     = "1.0.0"
-  constraints = "1.0.0"
+  version     = "0.7.1"
+  constraints = "0.7.1"
   hashes = [
-    "h1:Ef2u9JLvoQv2TNT6rpuaKQu7Ps5teZKfGSxpoBMMEOk=",
-    "zh:064e63ea800cd1a8e575064097bc7de6fd5faa8ad50dbb3f2f9d8a3ebc9d7b97",
-    "zh:0663900085949d2faf24c170c7cdfbf76e545797915cc331da8304144c02bf27",
-    "zh:2ff26c7e5ee356c30791a12dd8e114c6237bd873d09e52805cb30dd5d758ed23",
-    "zh:44211fa474112ad0c9fcdae03f13ec7c75cdefd3ab29979b99cb834208055593",
-    "zh:6c3ab441c12b9679ad1dcac580d1ee7782f0d94efe6da6e983435ed39335cd3f",
-    "zh:8924cc939b52382ef042dc38bde93cdf438ff0aeab5e1801fbd198f05b80cd47",
-    "zh:ebc189ce22c23b903399f71e33d465001a79d7de7f7bf115c7763fcf794f4b58",
+    "h1:m8vjAiURL0j7z3Ns4U/jroO+lhzg1A2YcWnMhqIvdzQ=",
+    "zh:203d5ab6af38efb9fc84fdbb303218aa5012dc8d28e700642be41bbc4b1c2fa1",
+    "zh:5684a2dc65da50824fb4275c10ac452e6512dd0d60a9abd5f505e67e7b9d759a",
+    "zh:b4311d7cae0b29f2dcf5a18a8297ed0787f59b140102547da9f8b61af27e15b6",
+    "zh:bbf9e6956191a95dfbb8336b1cc8a059ceba4d3f1f22a83e4f08662cd1cabe9b",
+    "zh:cd8f244d26f9733b9b238db22b520e69cdc68262093db3389ec466b1df2cadd8",
+    "zh:d855e4dc2ad41d8a877dd5dcd51061233fc5976c5c9afceb5a973e6a9f76b1d9",
+    "zh:ed584cf42015e1f10359cc2d85b12e348c5c1581ae781be29e0e3dfb7f43590b",
   ]
 }
 
@@ -35,5 +35,19 @@ provider "registry.opentofu.org/integrations/github" {
     "zh:e69d9cc8047ef89fbea2c8b08e021c362705118574060bafeec6754f3cf21af0",
     "zh:e76c821db806e2fe81272abe51800b892c0b65da564e5d1c20176141220f03b1",
     "zh:ea325c6e0451b3cdb4f51b97e7f8ecd0906d6fc1c192e8627ca31e10301cc992",
+  ]
+}
+
+provider "registry.opentofu.org/spacelift-io/spacelift" {
+  version     = "1.9.3"
+  constraints = "1.9.3"
+  hashes = [
+    "h1:f6Htx+g76vTdQO6CHM9M9T3/tkAcgvxcszWCPu4r+44=",
+    "zh:15e1db23c96f5e7341016915ba200139197eab185d2c4ba14e56b3093258f097",
+    "zh:4c996d1a7b65aa826224ca01e17898854394921147f48e0c42fda77fb7566ec7",
+    "zh:9e798808b5e68f56b68bf4a80378b14234ff26ca26f04a7199ae6af1c770e036",
+    "zh:c778b16d064ae9b6c181493f3f61a2776a52f85dcd686be638e1425cb0e4f2a1",
+    "zh:ca020c8a12ec50fe97ee42af50093460d8d983420255e5bf3c7b80040874d4f9",
+    "zh:cb0d814f1bf187095ab4649c685fa695a2426fcffe62358816f9f89859786abb",
   ]
 }
