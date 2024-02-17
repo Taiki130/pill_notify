@@ -16,5 +16,6 @@ resource "github_actions_secret" "secrets" {
 }
 
 variable "secrets" {
-  type = map(string)
+  type    = map(string)
+  default = null
 }
