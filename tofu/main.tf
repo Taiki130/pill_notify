@@ -19,7 +19,7 @@ provider "github" {}
 provider "sops" {}
 provider "spacelift" {
   api_key_endpoint = "https://taiki130.app.spacelift.io"
-  api_key_id       = "01HPS3Y30M66SJD4JK4JEZ1RCP"
+  api_key_id       = "01HPVH7QENMSCCD5XN85CSP4D1"
   api_key_secret   = data.sops_file.tf_secrets.data["SPACELIFT_API_KEY_SECRET"]
 }
 
@@ -31,6 +31,7 @@ resource "spacelift_module" "github_actions_secret" {
   description        = "create github_actions_secret"
   repository         = "pill_notify"
   project_root       = "tofu/github"
+  space_id           = "root"
 }
 
 module "github_actions_secret" {
