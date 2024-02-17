@@ -16,7 +16,7 @@
     ],
     hostRules: [
         {
-            matchHost: "https://spacelift.io",
+            matchHost: "spacelift.io",
             encrypted: {
                 token: "wcFMA/xDdHCJBTolAQ//Xor0X/bJPdrpjJun5NFZySpmQW3rgH/FG9eTVWF0p1f3S5kWs5NZfxCf96Dl39zu3tBHmrVc3HKPbu7Q0wkWm37s2/M9HGtRfYRAw4IpgBjJPmiPr76wiVTXkZD6KtCHiZibXJILoTXt7yocrysfWHShfgVzBLTIC7Bfl2TRTPNM4QrZMZVjdxsa74Zld53c3G7xu7HqTWRmNvFwRhM5WMzcMJ8DFAVHX85ago3l1XQcwHdKYtUa66Kg8Jcw8AHn38AO2w6kSS8XUN7L5KBRmYsOWQseISGL676ew1DPFIIsXaoZEXAKJwTGz0hdTbkuli0cwm5HDzV0KGB+9o0dAqsO4MwL8F7cN7qqMTGBJNrUgR3hkb6z6r4PFfxKluC3uXJ27h9ePm2vIUTYgnkNgmpTehWnHBSI4j0/9zGRaAmqvtPn0GBB9uyQSNGuWBP5jz9ouO4n3Bpp5CQWUvvvrz8Yyre7GhNAtfPsW+iF4nnIlIlctyOdKrN13oeR2377XSlPVCccMIi7p5a7HPvPp6sj4F5Zr4CBo4r4HO0M4S78rTuaindq1kVCRf6xn5Pc5V0SF/00aOBbjF5/gtZkxuztM0LtNe5/LAGHqn7txenwjavAsIryiy3Ng0wzQqPkegl2CMLcMfMhuvD1k41+iG1H//OAhYWX/PbnhaHmp3DSwA4BUvZaiyIzW6+x9A5AOZn9HY6B8mraKJE9+eJwqshg2aGhzmRR9nW1JVnIabOAQc0Y53TkgIx/egUj97cT6iGELi6nq0DzD9DSPt3px89H0xE+lIky2grIdJwzq44t/eRM4UDPnhn9btYVXSg1DLhvOBcsptCDUiS87yQAoMVk6J+6JfVSF8ayu/Hk9xPlA9W/Nmvm1v32cG6RYaD+xBfyf1nN9h06B8peB5cNiShL5AL5D9pqG/zgJSSPQzRi9vDRwpCEUZXV13ntp6cSYw"
             }
