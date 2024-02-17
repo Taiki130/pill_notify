@@ -35,7 +35,7 @@ resource "spacelift_module" "github_actions_secret" {
 
 module "github_actions_secret" {
   source  = "spacelift.io/taiki130/github_actions_secret/github"
-  version = "1.1.0"
+  version = "1.0.0"
 
   secrets = nonsensitive(data.sops_file.secrets.data)
 }
