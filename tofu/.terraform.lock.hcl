@@ -1,7 +1,7 @@
-# This file is maintained automatically by "tofu init".
+# This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
-provider "registry.opentofu.org/carlpett/sops" {
+provider "registry.terraform.io/carlpett/sops" {
   version     = "1.0.0"
   constraints = "1.0.0"
   hashes = [
@@ -16,24 +16,11 @@ provider "registry.opentofu.org/carlpett/sops" {
   ]
 }
 
-provider "registry.opentofu.org/integrations/github" {
+provider "registry.terraform.io/integrations/github" {
   version     = "6.0.0"
   constraints = "6.0.0"
   hashes = [
-    "h1:9pdD0wlgzxXpJt41zvAPTBJlSVQjrivGj/PKXonvjdI=",
     "h1:C0tQYTi4xfFbv49ohtqcnUS6N3zkieMUlGgVtZa2KNg=",
-    "h1:IsJlhZqzDak5PE4u/DGPpVuh007NWn6RGL42sZNUZtE=",
-    "h1:JN9FDT93mtIFE9oTZFJN8iBBkYM4VUBN35H9ejI0pKA=",
-    "h1:KXepSQ13ED8xN5b74H4KPbWkm03U53F5ey+Htk+SLlk=",
-    "h1:LeDpsKXQvLh5IPHNj0i5/2j0G3QocWKosoI4Vt+R2GY=",
-    "h1:YGUmIpK8zBYXssW5vJcQEaRvimE/kxcIifcEDnfThMQ=",
-    "h1:aPVKHd7sUHWfHO2nY2jUaEGa6YK89KPNCykbWKVMPoA=",
-    "h1:cHq9ip3mg1zIEXQPvi7Zqb2dQcsQBZlthQWFMaRzbUE=",
-    "h1:gXBHc4e5JRRkX35POfXbiuBBPNxjQ6KAH0d9QR+jeWk=",
-    "h1:hgxwIjasPR+EYjFCms6PkTBYYx1+VJJfcOQ5/UjTReQ=",
-    "h1:jLOsi4Qu5g5D2/n/xg/CljAKCRH9F9paiWRZtyzWR+k=",
-    "h1:mTMlNk78lzcXTm4kgqCVFETkGIt0RgwQGzwDvI5HjbQ=",
-    "h1:p86Nsa+Fo29MVOXYG8x+M0MP/R4QS8nl4CUu6Us+/YU=",
     "zh:0d12fde69c54d358af3a45cf1610b711e1cd6a5d0be8d71c24729f28faa4a67d",
     "zh:501fd9a181bbb1f3e70c3a54463bc16974569dddd1311fdd682c3b893ebc8455",
     "zh:69a486e2b2db2f7ff947027e5e245b48a1f71e10955e7243419c15d9d8330d54",
@@ -51,7 +38,7 @@ provider "registry.opentofu.org/integrations/github" {
   ]
 }
 
-provider "registry.opentofu.org/spacelift-io/spacelift" {
+provider "registry.terraform.io/spacelift-io/spacelift" {
   version     = "1.9.3"
   constraints = "1.9.3"
   hashes = [
