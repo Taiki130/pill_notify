@@ -48,3 +48,8 @@ data "sops_file" "secrets" {
 data "sops_file" "tf_secrets" {
   source_file = "tf_secrets.yaml"
 }
+
+module "test" {
+  source  = "mguillet-payfit/tf-private-module-issue/renovate"
+  version = "1.0.0"
+}
