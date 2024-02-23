@@ -35,11 +35,39 @@ func TestCalculateDay(t *testing.T) {
 			},
 			want: false,
 		},
+		{
+			name: "飲む",
+			args: args{
+				FirstRunDate: parseTime("2024-02-14"),
+				CurrentDate:  parseTime("2024-02-23"),
+			},
+			want: false,
+		},
+		{
+			name: "飲む",
+			args: args{
+				FirstRunDate: parseTime("2024-02-14"),
+				CurrentDate:  parseTime("2024-02-14"),
+			},
+			want: false,
+		},
+		{
+			name: "休み",
+			args: args{
+				FirstRunDate: parseTime("2024-02-14"),
+				CurrentDate:  parseTime("2024-03-10"),
+			},
+			want: true,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := calculateDay(tt.args.FirstRunDate, tt.args.CurrentDate); got != tt.want {
+			if got, err := calculateDay(tt.args.FirstRunDate, tt.args.CurrentDate); err != nil || got != tt.want {
+				if err != nil {
+					t.Errorf("calculateDay() error = %v", err)
+					return
+				}
 				t.Errorf("calculateDay() = %v, want %v", got, tt.want)
 			}
 		})
