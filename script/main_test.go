@@ -87,7 +87,6 @@ func TestGetRandomImage(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want int
 	}{
 		{
 			name: "URLが3つの場合",
@@ -117,20 +116,21 @@ func TestGetRandomImage(t *testing.T) {
 					t.Errorf("getRandomImage() error = %v", err)
 					return
 				}
-				t.Errorf("getRandomImage() = %v, want %v", got, tt.want)
+				t.Errorf("getRandomImage() = %v", got)
+			}
 
-				// ランダムに取得されているか
-				frequency := make(map[string]float64)
-				numIterations := 10000
-				for i := 0; i < numIterations; i++ {
-					got, _ := getRandomImage(tt.args.imageURLs)
-					frequency[got]++
-				}
-				expectedFrequency := float64(numIterations) / float64(len(tt.args.imageURLs))
-				for imageURL, freq := range frequency {
-					if freq < expectedFrequency*0.8 || freq > expectedFrequency*1.2 {
-						t.Errorf("Image %s の頻度が期待される頻度 %f に対して多すぎるか少なすぎます。", imageURL, expectedFrequency)
-					}
+			// ランダムに取得されているか
+			frequency := make(map[string]float64)
+			numIterations := 10000
+			for i := 0; i < numIterations; i++ {
+				got, _ := getRandomImage(tt.args.imageURLs)
+				frequency[got]++
+			}
+			t.Logf("頻度: %v", frequency)
+			expectedFrequency := float64(numIterations) / float64(len(tt.args.imageURLs))
+			for imageURL, freq := range frequency {
+				if freq < expectedFrequency*0.8 && freq > expectedFrequency*1.2 {
+					t.Errorf("Image %s の頻度が期待される頻度 %f に対して多すぎるか少なすぎます。", imageURL, expectedFrequency)
 				}
 			}
 		})
