@@ -6,33 +6,11 @@ on:
     - cron: "0 13 * * *"
 
 env:
-  FIRST_RUN_DATE: 2024-02-14
+  TZ: 'Asia/Tokyo'
 
 jobs:
-  calculate-days:
-    runs-on: ubuntu-latest
-    outputs:
-      is_holiday: ${{ steps.calculate.outputs.is_holiday }}
-    steps:
-      - name: Calculate # 28日周期で21日間と7日間を分ける
-        id: calculate
-        run: |
-          current_date=$(date +%Y-%m-%d)
-          start=$(date -d ${{ env.FIRST_RUN_DATE }} +%s)
-          end=$(date -d $current_date +%s)
-          weekdiff=$(((end-start) / 60 / 60 / 24 / 7 ))
-          if [[ $((weekdiff % 4)) -eq 3 ]]; then
-            echo "is_holiday=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_holiday=false" >> "$GITHUB_OUTPUT"
-          fi
-          cat "$GITHUB_OUTPUT"
-    env:
-      TZ: 'Asia/Tokyo'
   notify:
     runs-on: ubuntu-latest
-    if: ${{ needs.calculate-days.outputs.is_holiday != 'true' && needs.calculate-days.result == 'success' }}
-    needs: calculate-days
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: actions/setup-go@v5
@@ -49,3 +27,4 @@ jobs:
           OPENAI_PROMPT: ${{ secrets.OPENAI_PROMPT }}
           IMAGE_URL: ${{ secrets.IMAGE_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FIRST_RUN_DATE: 2024-02-14
