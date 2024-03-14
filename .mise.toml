@@ -1,5 +1,0 @@
-[tools]
-opentofu = '1.6.0'
-sops = '3.8.1'
-golang = '1.22.0'
-direnv = '2.33.0'
