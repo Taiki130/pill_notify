@@ -7,6 +7,7 @@ on:
 
 env:
   TZ: 'Asia/Tokyo'
+  LINE_TOKEN: ${{ secrets.LINE_TOKEN }}
 
 jobs:
   notify:
@@ -23,8 +24,16 @@ jobs:
           go mod download
           go run main.go
         env:
-          LINE_TOKEN: ${{ secrets.LINE_TOKEN }}
           OPENAI_PROMPT: ${{ secrets.OPENAI_PROMPT }}
           IMAGE_URL: ${{ secrets.IMAGE_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FIRST_RUN_DATE: 2024-02-14
+      - name: Notify if failed
+        if: failure()
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ env.LINE_TOKEN }}" \
+            -F 'message=workflowが失敗しました。原因を確認してください。${{ env.WORKFLOW_URL }}' \
+            ${{ env.ENDPOINT }}
+        env:
+          WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ENDPOINT: https://notify-api.line.me/api/notify
