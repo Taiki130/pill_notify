@@ -4,6 +4,6 @@ go 1.22.2
 
 require (
 	github.com/caarlos0/env/v10 v10.0.0
-	github.com/caarlos0/env/v11 v11.0.1
+	github.com/caarlos0/env/v11 v11.1.0
 	github.com/sashabaranov/go-openai v1.26.0
 )
