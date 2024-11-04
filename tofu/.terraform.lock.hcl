@@ -58,20 +58,20 @@ provider "registry.opentofu.org/integrations/github" {
 }
 
 provider "registry.opentofu.org/spacelift-io/spacelift" {
-  version     = "1.16.1"
-  constraints = "1.16.1"
+  version     = "1.17.0"
+  constraints = "1.17.0"
   hashes = [
-    "h1:4KpNTkG+oUj7mihgAROPjYVL7kag8Pr/R4FtZ/UOADA=",
-    "h1:J3/WR9swDZOAge/mfWtbqInFQeaAtpV3/Brxrk2LbG4=",
-    "h1:L+42+zfSoTUKELZHFFk49Kq0udLr3hrR56ityW/PY3U=",
-    "h1:XPQtvmTbwvvLFrtAzMAAYNODViuUcU2WnzR2xnmfB94=",
-    "h1:ppk+rKwtFXlEIjcbdzZLTr0tC1Ghfhv1Y1qWV8DpPoE=",
-    "h1:qVRCLTCBVw+rVmRXqxFX5mhr8UQVOXoWIZCNqCyWJ2c=",
-    "zh:284045c910a2c22b2c68b3a805fd01b200f1434fd4d285e9bd47bf655ddcfd18",
-    "zh:8a17eea1a1c438fcd9f236b1165c292791e0dc079364c0c628d25ba3f954dcd5",
-    "zh:8da694a38a174e69b074c6104c05ea3a691228adbbdca1c5771b56fb436e3c20",
-    "zh:8f2d3ba55a05ff3723c2d0c158f68bd3dfb8038169ebbef113bb88b729494785",
-    "zh:9a49905594efb11ec9039057bb5101d8e7ad6e2c7cf0dfb0ea09873dc3433e76",
-    "zh:a976fe76e94fb1521a8bc00b3a885d0ae666d552f6aed44563847ea51a027f78",
+    "h1:AEXFpmHM85DRmuQ48xv8uoGz3fD6daRa6TJHNUfUB3Y=",
+    "h1:EiU79qNZya2KZUnbOdOCrxPK28mMlbJYlFlkr+8m0D4=",
+    "h1:Kc5eA2YQu2MvMGGg+K2qufRT1LzW/gC0ZgzzJcr+pTY=",
+    "h1:mXvXh3GlwlK1EnXjYROo2aJelDOy61p/5NzlxJ5tdN8=",
+    "h1:mzigEIuq6R7qe1XkDaYu0tmi/aK0gNTE41/edW8AWLA=",
+    "h1:si8CLM61RjjzrkCXbyj1ToHCic7fXIENSowsgteDc+8=",
+    "zh:323e186f993776f981f47c596ed0302887fc506731577bfc9980bf6e8447b60a",
+    "zh:7ff045c2b32cb2e52897c5818b78f722367c5098950fa7afbf8c63a3f8b16cf4",
+    "zh:9397e4d496f9f26bbdf32df8732b89de145dfcf9cb8fa09ba931436f9a5f36de",
+    "zh:a84f47e5d472887975a4a59ca64e0be32adf17172bf4b0831a590ce9912fb3f8",
+    "zh:eb47a7c925cc3a5fad97acaeb5d1fbe280c5c97030e026f138d8ef1a7aa4d93e",
+    "zh:fe58604b8dd1b68fb826916f991227f0c882960bdf8b89387e1b004ee47246d1",
   ]
 }
