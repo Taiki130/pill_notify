@@ -6,6 +6,7 @@ github.com/caarlos0/env/v11 v11.1.0/go.mod h1:LwgkYk1kDvfGpHthrWWLof3Ny7PezzFwS4
 github.com/caarlos0/env/v11 v11.2.0/go.mod h1:LwgkYk1kDvfGpHthrWWLof3Ny7PezzFwS4QrsJdHTMo=
 github.com/caarlos0/env/v11 v11.2.2/go.mod h1:JBfcdeQiBoI3Zh1QRAWfe+tpiNTmDtcCj/hHHHMx0vc=
 github.com/caarlos0/env/v11 v11.3.0/go.mod h1:Q5lYHeOsgY20CCV/R+b50Jwg2MnjySid7+3FUBz2BJw=
+github.com/caarlos0/env/v11 v11.3.1/go.mod h1:qupehSf/Y0TUTsxKywqRt/vJjN5nz6vauiYEUUr8P4U=
 github.com/sashabaranov/go-openai v1.19.3 h1:xJvkU8Tye6MOKLaoqjh7qXYwKiEYGtlmp06cb8179yo=
 github.com/sashabaranov/go-openai v1.19.3/go.mod h1:lj5b/K+zjTSFxVLijLSTDZuP7adOgerWeFyZLUhAKRg=
 github.com/sashabaranov/go-openai v1.19.4 h1:GbaDiqvgYCabyqzuIbcEeT6/ZX1nVfur+++oTBfOgks=
