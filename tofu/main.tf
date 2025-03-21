@@ -10,7 +10,7 @@ terraform {
     }
     spacelift = {
       source  = "spacelift-io/spacelift"
-      version = "1.20.3"
+      version = "1.20.4"
     }
   }
 }
